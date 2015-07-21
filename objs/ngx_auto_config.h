@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #define NGX_CONFIGURE " --prefix=/home/renwh/nginx --add-module=/home/renwh/src/nginx-1.9.2/mytest/"
+=======
+#define NGX_CONFIGURE " --prefix=/home/renwh/nginx --add-module=/home/renwh/mytest"
+>>>>>>> 39e681b49934471fbdeef8c4ba34a232119cbeb0
 
 #ifndef NGX_COMPILER
 #define NGX_COMPILER  "gcc 4.4.7 20120313 (Red Hat 4.4.7-11) (GCC) "

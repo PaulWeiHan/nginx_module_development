@@ -39,7 +39,11 @@ extern ngx_module_t  ngx_http_upstream_ip_hash_module;
 extern ngx_module_t  ngx_http_upstream_least_conn_module;
 extern ngx_module_t  ngx_http_upstream_keepalive_module;
 extern ngx_module_t  ngx_http_upstream_zone_module;
+<<<<<<< HEAD
 extern ngx_module_t  ngx_http_hello_module;
+=======
+extern ngx_module_t  ngx_http_mytest_module;
+>>>>>>> 39e681b49934471fbdeef8c4ba34a232119cbeb0
 extern ngx_module_t  ngx_http_write_filter_module;
 extern ngx_module_t  ngx_http_header_filter_module;
 extern ngx_module_t  ngx_http_chunked_filter_module;
@@ -90,7 +94,11 @@ ngx_module_t *ngx_modules[] = {
     &ngx_http_upstream_least_conn_module,
     &ngx_http_upstream_keepalive_module,
     &ngx_http_upstream_zone_module,
+<<<<<<< HEAD
     &ngx_http_hello_module,
+=======
+    &ngx_http_mytest_module,
+>>>>>>> 39e681b49934471fbdeef8c4ba34a232119cbeb0
     &ngx_http_write_filter_module,
     &ngx_http_header_filter_module,
     &ngx_http_chunked_filter_module,

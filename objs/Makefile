@@ -213,7 +213,11 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/http/modules/ngx_http_upstream_least_conn_module.o \
 	objs/src/http/modules/ngx_http_upstream_keepalive_module.o \
 	objs/src/http/modules/ngx_http_upstream_zone_module.o \
+<<<<<<< HEAD
 	objs/addon/mytest/ngx_http_hello_module.o \
+=======
+	objs/addon/mytest/ngx_http_mytest_module.o \
+>>>>>>> 39e681b49934471fbdeef8c4ba34a232119cbeb0
 	objs/ngx_modules.o
 
 	$(LINK) -o objs/nginx \
@@ -327,7 +331,11 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/http/modules/ngx_http_upstream_least_conn_module.o \
 	objs/src/http/modules/ngx_http_upstream_keepalive_module.o \
 	objs/src/http/modules/ngx_http_upstream_zone_module.o \
+<<<<<<< HEAD
 	objs/addon/mytest/ngx_http_hello_module.o \
+=======
+	objs/addon/mytest/ngx_http_mytest_module.o \
+>>>>>>> 39e681b49934471fbdeef8c4ba34a232119cbeb0
 	objs/ngx_modules.o \
 	-lpthread -lcrypt -lpcre -lz
 	
@@ -1110,11 +1118,19 @@ objs/src/http/modules/ngx_http_upstream_zone_module.o:	$(CORE_DEPS) $(HTTP_DEPS)
 		src/http/modules/ngx_http_upstream_zone_module.c
 
 
+<<<<<<< HEAD
 objs/addon/mytest/ngx_http_hello_module.o:	$(ADDON_DEPS) \
 	/home/renwh/src/nginx-1.9.2/mytest//ngx_http_hello_module.c
 	$(CC) -c $(CFLAGS)  $(ALL_INCS) \
 		-o objs/addon/mytest/ngx_http_hello_module.o \
 		/home/renwh/src/nginx-1.9.2/mytest//ngx_http_hello_module.c
+=======
+objs/addon/mytest/ngx_http_mytest_module.o:	$(ADDON_DEPS) \
+	/home/renwh/mytest/ngx_http_mytest_module.c
+	$(CC) -c $(CFLAGS)  $(ALL_INCS) \
+		-o objs/addon/mytest/ngx_http_mytest_module.o \
+		/home/renwh/mytest/ngx_http_mytest_module.c
+>>>>>>> 39e681b49934471fbdeef8c4ba34a232119cbeb0
 
 
 manpage:	objs/nginx.8

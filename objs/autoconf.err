@@ -184,7 +184,11 @@ cc -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -o objs/autotest objs/autotest.c
 ----------------------------------------
 checking for crypt()
 
+<<<<<<< HEAD
 /tmp/cca3py5x.o: In function `main':
+=======
+/tmp/ccILi5RR.o: In function `main':
+>>>>>>> 39e681b49934471fbdeef8c4ba34a232119cbeb0
 autotest.c:(.text+0xf): undefined reference to `crypt'
 collect2: ld returned 1 exit status
 ----------
@@ -292,7 +296,11 @@ checking for statvfs()
 ----------------------------------------
 checking for dlopen()
 
+<<<<<<< HEAD
 /tmp/ccUDsByL.o: In function `main':
+=======
+/tmp/ccjqIE24.o: In function `main':
+>>>>>>> 39e681b49934471fbdeef8c4ba34a232119cbeb0
 autotest.c:(.text+0xf): undefined reference to `dlopen'
 collect2: ld returned 1 exit status
 ----------
@@ -473,7 +481,11 @@ checking for time_t size
 ----------------------------------------
 checking for setproctitle()
 
+<<<<<<< HEAD
 /tmp/cc8CPF0w.o: In function `main':
+=======
+/tmp/ccgxCWNS.o: In function `main':
+>>>>>>> 39e681b49934471fbdeef8c4ba34a232119cbeb0
 autotest.c:(.text+0xf): undefined reference to `setproctitle'
 collect2: ld returned 1 exit status
 ----------
@@ -502,7 +514,11 @@ checking for pwrite()
 ----------------------------------------
 checking for sys_nerr
 
+<<<<<<< HEAD
 /tmp/ccJJSawF.o: In function `main':
+=======
+/tmp/ccNvoej2.o: In function `main':
+>>>>>>> 39e681b49934471fbdeef8c4ba34a232119cbeb0
 autotest.c:(.text+0x6): warning: `sys_nerr' is deprecated; use `strerror' or `strerror_r' instead
 135
 ----------------------------------------
@@ -532,7 +548,11 @@ checking for System V shared memory
 ----------------------------------------
 checking for POSIX semaphores
 
+<<<<<<< HEAD
 /tmp/ccFhtTwU.o: In function `main':
+=======
+/tmp/ccd1hiag.o: In function `main':
+>>>>>>> 39e681b49934471fbdeef8c4ba34a232119cbeb0
 autotest.c:(.text+0x1a): undefined reference to `sem_init'
 autotest.c:(.text+0x32): undefined reference to `sem_destroy'
 collect2: ld returned 1 exit status
