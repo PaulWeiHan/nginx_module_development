@@ -235,12 +235,12 @@ static ngx_int_t ngx_http_configprint_handler(ngx_http_request_t *r)
                 || my_cf->testflag == 0)
         {
                 ngx_sprintf(ngx_my_string, "printstr = %V, printnum = %i, printsize = %z", 
-                	my_cf->teststr, my_cf->testnum, my_cf->testsize);
+                	&my_cf->teststr, my_cf->testnum, my_cf->testsize);
         }
         else
         {
                 ngx_sprintf(ngx_my_string, "printstr = %V, printnum = %i, printsize = %z, Visited Times:%d",
-                	my_cf->teststr, my_cf->testnum, my_cf->testsize, ++ngx_configprint_visited_times);
+                	&my_cf->teststr, my_cf->testnum, my_cf->testsize, ++ngx_configprint_visited_times);
         }
     content_length = ngx_strlen(ngx_my_string);
 
