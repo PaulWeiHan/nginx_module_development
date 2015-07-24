@@ -1,0 +1,8 @@
+for nginx.conf 
+	location /sendfile {
+		sendflag on;
+		filename ...;
+	} 
+
+You can change the sendflag to enable or disable the file download.
+filename means the path/filename in your host
