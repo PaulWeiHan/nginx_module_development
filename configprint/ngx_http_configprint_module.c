@@ -1,5 +1,6 @@
 /*
 	Copyright (C) Paul 
+	rwhsysu@163.com
 
 	for nginx.conf 
 
@@ -8,8 +9,8 @@
 		printflag on;
 		printnum 9;
 		printsize 199;
-
 	} 
+
 
 */
 
@@ -234,13 +235,15 @@ static ngx_int_t ngx_http_configprint_handler(ngx_http_request_t *r)
     if (my_cf->testflag == NGX_CONF_UNSET
                 || my_cf->testflag == 0)
         {
-                ngx_sprintf(ngx_my_string, "printstr = %V, printnum = %i, printsize = %z", 
+                ngx_sprintf(ngx_my_string, "<strong> <font color=\"red\"> printstr =</font> %V, <font color=\"red\">printnum =</font>  %i, <font color=\"red\">printsize =</font>  %z</strong>", 
                 	&my_cf->teststr, my_cf->testnum, my_cf->testsize);
         }
         else
         {
-                ngx_sprintf(ngx_my_string, "printstr = %V, printnum = %i, printsize = %z, Visited Times:%d",
-                	&my_cf->teststr, my_cf->testnum, my_cf->testsize, ++ngx_configprint_visited_times);
+                ngx_sprintf(ngx_my_string, "<strong> <font color=\"red\">printstr =</font>  %V, <font color=\"red\">printnum =</font>  %i, \
+                	<font color=\"red\">printsize =</font>  %z, <font color=\"red\">Visited Times:</font> %d, \
+                	<font color=\"red\">URI:</font> %V,  <font color=\"red\">request_line:</font> %V</strong>",
+                	&my_cf->teststr, my_cf->testnum, my_cf->testsize, ++ngx_configprint_visited_times, &r->uri, &r->request_line);
         }
     content_length = ngx_strlen(ngx_my_string);
 
