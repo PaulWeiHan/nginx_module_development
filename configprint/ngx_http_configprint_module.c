@@ -56,7 +56,9 @@ static ngx_command_t ngx_http_configprint_commands[]={
 		NGX_CONF_NOARGS：配置指令不接受任何参数。
 		or  NGX_CONF_TAKE1：配置指令接受1个参数。
         */
-        ngx_conf_set_str_slot, /*配置处理函数
+        ngx_conf_set_str_slot, /*配置处理函数   可以自定义
+        
+        char *(*set)(ngx_conf_t *cf, ngx_command_t *cmd, void *conf);
 
 		nginx已经默认提供了对一些标准类型的参数进行读取的函数，可以直接赋值给set字段使用。下面来看一下这些已经实现的set类型函数。
 		ngx_conf_set_flag_slot： 读取NGX_CONF_FLAG类型的参数。
@@ -145,6 +147,32 @@ static ngx_int_t ngx_http_configprint_init(ngx_conf_t *cf)
 	cmcf = ngx_http_conf_get_module_main_conf(cf, ngx_http_core_module); //取得core_module的cf
 
         h = ngx_array_push(&cmcf->phases[NGX_HTTP_CONTENT_PHASE].handlers); // 挂载函数到对应处理阶段
+        /*
+        为了更精细地控制对于客户端请求的处理过程，nginx把这个处理过程划分成了11个阶段。
+        他们从前到后，依次列举如下：
+		NGX_HTTP_POST_READ_PHASE:
+		 	读取请求内容阶段
+		NGX_HTTP_SERVER_REWRITE_PHASE:
+		 	Server请求地址重写阶段
+		NGX_HTTP_FIND_CONFIG_PHASE:
+		 	配置查找阶段:
+		NGX_HTTP_REWRITE_PHASE:
+		 	Location请求地址重写阶段
+		NGX_HTTP_POST_REWRITE_PHASE:
+		 	请求地址重写提交阶段
+		NGX_HTTP_PREACCESS_PHASE:
+		 	访问权限检查准备阶段
+		NGX_HTTP_ACCESS_PHASE:
+		 	访问权限检查阶段
+		NGX_HTTP_POST_ACCESS_PHASE:
+		 	访问权限检查提交阶段
+		NGX_HTTP_TRY_FILES_PHASE:
+		 	配置项try_files处理阶段
+		NGX_HTTP_CONTENT_PHASE:
+		 	内容产生阶段
+		NGX_HTTP_LOG_PHASE:
+		 	日志模块处理阶段
+        */
         if (h == NULL) {
                 return NGX_ERROR;
         }
@@ -243,7 +271,7 @@ static ngx_int_t ngx_http_configprint_handler(ngx_http_request_t *r)
                 ngx_sprintf(ngx_my_string, "<strong> <font color=\"red\">printstr =</font>  %V, <font color=\"red\">printnum =</font>  %i, \
                 	<font color=\"red\">printsize =</font>  %z, <font color=\"red\">Visited Times:</font> %d, \
                 	<font color=\"red\">URI:</font> %V,  <font color=\"red\">request_line:</font> %V</strong>",
-                	&my_cf->teststr, my_cf->testnum, my_cf->testsize, ++ngx_configprint_visited_times, &r->uri, &r->request_line);
+                	&my_cf->teststr, my_cf->testnum, my_cf->testsize, ++ngx_configprint_visited_times, &r->uri, r->request);
         }
     content_length = ngx_strlen(ngx_my_string);
 

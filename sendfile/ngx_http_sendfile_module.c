@@ -21,7 +21,7 @@ typedef struct
 
 static ngx_int_t ngx_http_sendfile_init(ngx_conf_t *cf); //handler挂载函数,  content phase handlers
 
-static void * ngx_http_sendfile_create_loc_conf(ngx_conf_t *cf);
+static void * ngx_http_sendfile_create_loc_conf(ngx_conf_t *cf); //创建local_conf
 
 static ngx_int_t ngx_http_sendfile_handler(ngx_http_request_t *r); //handler 函数定义
 
