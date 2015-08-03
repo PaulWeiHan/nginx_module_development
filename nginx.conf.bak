@@ -56,6 +56,9 @@ http {
         sendflag on;
         filename /home/renwh/src/nginx-1.9.2/sendfile/ngx_http_sendfile_module.c;
         } 
+        location /mycookie {
+        cookieflag on;
+        } 
 	
         #error_page  404              /404.html;
 
