@@ -258,7 +258,13 @@ static ngx_int_t ngx_http_configprint_handler(ngx_http_request_t *r)
 	 *    %S                        null-terminated wchar string
 	 *    %C                        wchar
 	 */
-
+	 ngx_table_elt_t * host = r->headers_in.host;
+	 //ngx_connection_local_sockaddr(r->connection, NULL, 0);
+	 struct sockaddr_in *ip = (struct sockaddr_in *) (r->connection->sockaddr); //inet_ntoa(ip->sin_addr)
+	 ngx_table_elt_t * content_type_in = r->headers_in.content_type;
+	 if (content_type_in == NULL){
+	 	ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "content_type_in is empty!");
+	 }
 
     if (my_cf->testflag == NGX_CONF_UNSET
                 || my_cf->testflag == 0)
@@ -270,8 +276,9 @@ static ngx_int_t ngx_http_configprint_handler(ngx_http_request_t *r)
         {
                 ngx_sprintf(ngx_my_string, "<strong> <font color=\"red\">printstr =</font>  %V, <font color=\"red\">printnum =</font>  %i, \
                 	<font color=\"red\">printsize =</font>  %z, <font color=\"red\">Visited Times:</font> %d, \
-                	<font color=\"red\">URI:</font> %V,  <font color=\"red\">request_line:</font> %V</strong>",
-                	&my_cf->teststr, my_cf->testnum, my_cf->testsize, ++ngx_configprint_visited_times, &r->uri, r->request);
+                	<font color=\"red\">URI:</font> %V,  <font color=\"red\">request_line:</font> %V, <font color=\"red\">host:</font> %V\
+                	, <font color=\"red\">ip:</font> %V :%D, <font color=\"red\">args:</font> %V</strong>",
+                	&my_cf->teststr, r->http_version, my_cf->testsize, ++ngx_configprint_visited_times, &r->method_name, &r->request_line, &host->value, &r->connection->addr_text , ntohs(ip->sin_port), &r->args); 
         }
     content_length = ngx_strlen(ngx_my_string);
 

@@ -161,7 +161,7 @@ static ngx_int_t ngx_http_mycookie_handler(ngx_http_request_t *r)
                 ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "cookieflag is UNSET!");
                 return NGX_DECLINED;
         }
-    //从请求头读取cookies，使用的时候可以使用cookies[0]->value.datak,cookies[0]->value.len
+    //从请求头读取cookies，使用的时候可以使用cookies[0]->value.data,cookies[0]->value.len
     ngx_table_elt_t * cookies = NULL;
     cookies = r->headers_in.cookies.elts; 
 

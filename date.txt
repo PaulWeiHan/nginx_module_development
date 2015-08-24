@@ -1,0 +1,40 @@
+Breakpoint 2, ngx_http_configprint_handler (r=0x121f540)
+    at /home/renwh/src/nginx-1.9.2/configprint//ngx_http_configprint_module.c:185
+185     {
+(gdb) s
+190             u_char ngx_my_string[1024] = {0};
+(gdb) bt
+#0  ngx_http_configprint_handler (r=0x121f540)
+    at /home/renwh/src/nginx-1.9.2/configprint//ngx_http_configprint_module.c:190
+#1  0x000000000042ac97 in ngx_http_core_content_phase (r=0x121f540, ph=0x12361b8)
+    at src/http/ngx_http_core_module.c:1366
+#2  0x0000000000425723 in ngx_http_core_run_phases (r=0x121f540)
+    at src/http/ngx_http_core_module.c:840
+#3  0x0000000000425840 in ngx_http_handler (r=<value optimized out>)
+    at src/http/ngx_http_core_module.c:823
+#4  0x000000000042da94 in ngx_http_process_request (r=0x121f540)
+    at src/http/ngx_http_request.c:1902
+#5  0x000000000042f790 in ngx_http_process_request_headers (rev=<value optimized out>)
+    at src/http/ngx_http_request.c:1333
+#6  0x000000000042fc1f in ngx_http_process_request_line (rev=0x1239730)
+    at src/http/ngx_http_request.c:1013
+#7  0x000000000042fee9 in ngx_http_keepalive_handler (rev=0x1239730)
+    at src/http/ngx_http_request.c:3188
+#8  0x00000000004228fd in ngx_epoll_process_events (cycle=<value optimized out>, 
+    timer=<value optimized out>, flags=<value optimized out>)
+    at src/event/modules/ngx_epoll_module.c:822
+#9  0x000000000041b60f in ngx_process_events_and_timers (cycle=0x1215040)
+    at src/event/ngx_event.c:242
+#10 0x000000000042108a in ngx_worker_process_cycle (cycle=0x1215040, 
+    data=<value optimized out>) at src/os/unix/ngx_process_cycle.c:769
+#11 0x000000000041f937 in ngx_spawn_process (cycle=0x1215040, 
+    proc=0x420fab <ngx_worker_process_cycle>, data=0x0, name=0x46de3e "worker process", 
+    respawn=-3) at src/os/unix/ngx_process.c:198
+#12 0x00000000004205cc in ngx_start_worker_processes (cycle=0x1215040, n=1, type=-3)
+    at src/os/unix/ngx_process_cycle.c:358
+#13 0x00000000004215d8 in ngx_master_process_cycle (cycle=0x1215040)
+    at src/os/unix/ngx_process_cycle.c:130
+#14 0x0000000000404485 in main (argc=<value optimized out>, argv=<value optimized out>)
+    at src/core/nginx.c:415
+
+    
