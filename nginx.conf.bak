@@ -58,7 +58,11 @@ http {
         } 
         location /mycookie {
         cookieflag on;
-        } 
+        }
+		
+		location /sscctest {
+		flag;
+		}
 	
         #error_page  404              /404.html;
 

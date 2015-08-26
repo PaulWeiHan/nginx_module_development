@@ -278,7 +278,7 @@ static ngx_int_t ngx_http_configprint_handler(ngx_http_request_t *r)
                 	<font color=\"red\">printsize =</font>  %z, <font color=\"red\">Visited Times:</font> %d, \
                 	<font color=\"red\">URI:</font> %V,  <font color=\"red\">request_line:</font> %V, <font color=\"red\">host:</font> %V\
                 	, <font color=\"red\">ip:</font> %V :%D, <font color=\"red\">args:</font> %V</strong>",
-                	&my_cf->teststr, r->http_version, my_cf->testsize, ++ngx_configprint_visited_times, &r->method_name, &r->request_line, &host->value, &r->connection->addr_text , ntohs(ip->sin_port), &r->args); 
+                	&my_cf->teststr, r->http_version, my_cf->testsize, ++ngx_configprint_visited_times, &r->uri, &r->request_line, &host->value, &r->connection->addr_text , ntohs(ip->sin_port), &r->args); 
         }
     content_length = ngx_strlen(ngx_my_string);
 

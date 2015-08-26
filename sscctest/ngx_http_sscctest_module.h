@@ -9,7 +9,7 @@
 #include <ngx_core.h>
 #include <ngx_http.h>
 
-typedef struct nax_http_sscctest_request_s ngx_http_sscctest_request_t;
+typedef struct ngx_http_sscctest_request_s ngx_http_sscctest_request_t;
 struct ngx_http_sscctest_request_s
 {
 	ngx_table_elt_t**	cookies;
@@ -24,7 +24,7 @@ struct ngx_http_sscctest_request_s
 
 };
 
-typedef struct nax_http_sscctest_response_s ngx_http_sscctest_response_t;
+typedef struct ngx_http_sscctest_response_s ngx_http_sscctest_response_t;
 struct ngx_http_sscctest_response_s
 {
 	enum StatusType
@@ -52,20 +52,18 @@ struct ngx_http_sscctest_response_s
 };
 
 //真正处理函数
-typedef ngx_int_t (*ngx_http_real_handler_pt)(ngx_http_sscctest_request_t *req,, ngx_http_sscctest_response_t *resp);
+typedef ngx_int_t (*ngx_http_real_handler_pt)(ngx_http_sscctest_request_t *req, ngx_http_sscctest_response_t *resp);
 
 typedef struct{
 	ngx_str_t arg;
 	ngx_http_real_handler_pt handler_func;
 }unit_t;
 
-typedef struct 
-{
-	/* data */
-	flag;
-	ngx_array_t* handlers;
+// typedef struct 
+// {
+//     /* data */
+//     ngx_array_t* handlers;
 
-}ngx_http_sscctest_loc_conf_t;
-
+// }ngx_http_sscctest_loc_conf_t;
 
 #endif /*_NGX_HTTP_SSCCTEST_MODULE_H_INCLUDED_*/

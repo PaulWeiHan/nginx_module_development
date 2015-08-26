@@ -8,21 +8,9 @@ ngx_int_t ngx_http_ssscctest_realhandler_test(ngx_http_sscctest_request_t *req, 
 {
 	ngx_int_t rc;
 	ngx_buf_t *b;
-	ngx_chain_t out;
-	ngx_http_configprint_loc_conf_t *my_cf;
 	u_char ngx_my_string[1024] = {0};
 	ngx_uint_t content_length = 0;
-	
-
-	ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "ngx_http_configprint_handler is called!");
-
-	my_cf = ngx_http_get_module_loc_conf(r,ngx_http_configprint_module);
-	if (my_cf->teststr.len == 0 )
-        {
-                ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "printstr is empty!");
-                return NGX_DECLINED;
-        }
-
+    printf("hhhh\n");
     /*
 	 * supported formats:
 	 *    %[0][width][x][X]O        off_t
@@ -53,33 +41,18 @@ ngx_int_t ngx_http_ssscctest_realhandler_test(ngx_http_sscctest_request_t *req, 
 	 *    %S                        null-terminated wchar string
 	 *    %C                        wchar
 	 */
-	 ngx_table_elt_t * host = r->headers_in.host;
-	 //ngx_connection_local_sockaddr(r->connection, NULL, 0);
-	 struct sockaddr_in *ip = (struct sockaddr_in *) (r->connection->sockaddr); //inet_ntoa(ip->sin_addr)
 
-    if (my_cf->testflag == NGX_CONF_UNSET
-                || my_cf->testflag == 0)
-        {
-                ngx_sprintf(ngx_my_string, "<strong> <font color=\"red\"> printstr =</font> %V, <font color=\"red\">printnum =</font>  %i, <font color=\"red\">printsize =</font>  %z</strong>", 
-                	&my_cf->teststr, my_cf->testnum, my_cf->testsize);
-        }
-        else
-        {
-                ngx_sprintf(ngx_my_string, "<strong> <font color=\"red\">printstr =</font>  %V, <font color=\"red\">printnum =</font>  %i, \
-                	<font color=\"red\">printsize =</font>  %z, <font color=\"red\">Visited Times:</font> %d, \
-                	<font color=\"red\">URI:</font> %V,  <font color=\"red\">request_line:</font> %V, <font color=\"red\">host:</font> %V\
-                	, <font color=\"red\">ip:</font> %s :%D, <font color=\"red\">args:</font> %V</strong>",
-                	&my_cf->teststr, my_cf->testnum, my_cf->testsize, ++ngx_configprint_visited_times, &r->uri, &r->request_line, &host->value, inet_ntoa(ip->sin_addr) , ntohs(ip->sin_port), &r->args); 
-        }
+    ngx_sprintf(ngx_my_string, "<font color=\"red\">URI:</font> %V,  <font color=\"red\">method:</font> %V, <font color=\"red\">remoteAddr:</font> %V : %D",
+                	&req->uri, &req->method, &req->remoteAddr, req->remotePort); 
+
     content_length = ngx_strlen(ngx_my_string);
 
     /* we response to 'GET' and 'HEAD' requests only */
-        if (!(r->method & (NGX_HTTP_GET|NGX_HTTP_HEAD))) {
+        if ((ngx_strcasecmp(req->method.data,(u_char *)"GET") && ngx_strcasecmp(req->method.data,(u_char *)"HEAD")) != 0) {
                 return NGX_HTTP_NOT_ALLOWED;
         }
 
-        /* discard request body, since we don't need it here */
-        rc = ngx_http_discard_request_body(r);
+        
 
         if (rc != NGX_OK) {
                 return rc;
@@ -89,16 +62,12 @@ ngx_int_t ngx_http_ssscctest_realhandler_test(ngx_http_sscctest_request_t *req, 
          *r->headers_out.content_type.len = sizeof("text/html") - 1;
          *r->headers_out.content_type.data = (u_char *)"text/html";
          */
-        ngx_str_set(&r->headers_out.content_type, "text/html");
-        r->headers_out.status = NGX_HTTP_OK;
-        r->headers_out.content_length_n = content_length;
-        /* send the header only, if the request type is http 'HEAD' */
-        if (r->method == NGX_HTTP_HEAD) {
-            	return ngx_http_send_header(r);
-        }
+        ngx_str_set(&resp->headers_out.content_type, "text/html");
+        resp->headers_out.status = NGX_HTTP_OK;
+        resp->headers_out.content_length_n = content_length;
 
         /* allocate a buffer for your response body */
-        b = ngx_pcalloc(r->pool, sizeof(ngx_buf_t));
+        b = malloc(sizeof(ngx_buf_t));
         if (b == NULL) {
                 return NGX_HTTP_INTERNAL_SERVER_ERROR;
         }
@@ -118,15 +87,7 @@ ngx_int_t ngx_http_ssscctest_realhandler_test(ngx_http_sscctest_request_t *req, 
         b->last_buf = 1;  /* this is the last buffer in the buffer chain */
 
         /* attach this buffer to the buffer chain */
-        out.buf = b;
-        out.next = NULL;
-        /* send the headers of your response */
-        rc = ngx_http_send_header(r);
-
-        if (rc == NGX_ERROR || rc > NGX_OK || r->header_only) {
-                return rc;
-        }
-
-        /* send the buffer chain of your response */
-        return ngx_http_output_filter(r, &out);
+        resp->buffers.buf = b;
+        resp->buffers.next = NULL;
+        return NGX_OK;
 }

@@ -162,7 +162,7 @@ static ngx_int_t ngx_http_mycookie_handler(ngx_http_request_t *r)
                 return NGX_DECLINED;
         }
     //从请求头读取cookies，使用的时候可以使用cookies[0]->value.data,cookies[0]->value.len
-    ngx_table_elt_t * cookies = NULL;
+    ngx_table_elt_t ** cookies = NULL;
     cookies = r->headers_in.cookies.elts; 
 
     ngx_table_elt_t * client_ip = NULL;

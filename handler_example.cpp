@@ -2,7 +2,7 @@
 
 
 
-example_handler(sscc_C_request_t *req_c,sscc_C_response_t *resp_c)
+example_handler(ngx_http_sscctest_request_t *req_c,ngx_http_sscctest_response_t *resp_c)
 {
 	sscc_CPP_request_t req_cpp;
 	sscc_CPP_response_t resp_cpp;
@@ -15,3 +15,5 @@ realhandler(sscc_CPP_request_t *req_cpp,sscc_CPP_response_t *resp_cpp)
 {
 	//your code
 }
+
+
