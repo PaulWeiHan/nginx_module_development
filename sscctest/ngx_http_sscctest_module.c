@@ -90,7 +90,7 @@ static ngx_int_t ngx_get_args_array(ngx_http_request_t *r, ngx_array_t *a)
     u_char  *p, *last;
     ngx_table_elt_t *k2v;
 
-    ngx_table_elt_t **test;
+    ngx_table_elt_t *test;
     
 
     if (r->args.len == 0) {
@@ -105,8 +105,11 @@ static ngx_int_t ngx_get_args_array(ngx_http_request_t *r, ngx_array_t *a)
 
         if (p == r->args.data || *(p - 1) == '&') {
 
-            k2v = ngx_array_push(a);
-
+            ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "ngx_get_args_array is called! a->nelts:%d ; a->elts:%d \n",a->nelts,a->elts);
+            //k2v = ngx_array_push(a);
+            k2v = (ngx_table_elt_t *) a->elts + a->size * a->nelts;
+            a->nelts++;
+            ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "ngx_get_args_array is called! k2v:%l ; a->elts:%l \n",k2v,a->elts);
             k2v->key.data = p;
             p = ngx_strlchr(p, last, '=');
             k2v->key.len = p - k2v->key.data;
@@ -120,9 +123,9 @@ static ngx_int_t ngx_get_args_array(ngx_http_request_t *r, ngx_array_t *a)
             k2v->value.len = p - k2v->value.data;
         }
     }
-    ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "ngx_get_args_array is called! k2v->value:%V ; k2v->size:%z \n",&k2v->value,sizeof(ngx_table_elt_t));
-    test = a->elts;
-    ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "ngx_get_args_array is called! %z %D test2->key:%V ; test2->value:%V \n",a->size,a->nelts,&test[0]->key,&test[0]->value);
+    ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "ngx_get_args_array is called! k2v->value:%V ; k2v->size:%D \n",&k2v->value,sizeof(ngx_table_elt_t));
+    test = a->elts; 
+    ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "ngx_get_args_array is called! %z %D %l test2->key:%V ; test2->value:%V \n",a->size,a->nelts,test,&test[0].key,&test[0].value);
 
     return NGX_OK;
 }
@@ -268,9 +271,9 @@ static ngx_int_t ngx_http_sscctest_handler(ngx_http_request_t *r)
 {
 	ngx_int_t rc;
 	//ngx_buf_t *b;
-    unit_t **unit;
+    unit_t *unit;
 	ngx_chain_t out;
-    ngx_str_t *handler_name = NULL;
+    ngx_str_t handler_name;
 	ngx_http_sscctest_loc_conf_t *my_cf;
     ngx_array_t *args;
 	//u_char ngx_my_string[1024] = {0};
@@ -333,16 +336,16 @@ static ngx_int_t ngx_http_sscctest_handler(ngx_http_request_t *r)
     sscc_C_request.headers_in = r->headers_in;
 
     /*************************  根据传入参数中的handler_name的值，决定调用的real_handler  **********************/
-    ngx_table_elt_t **args_unit = args->elts;
+    ngx_table_elt_t *args_unit = args->elts;
 
     
     ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "real_handler name compare\n");
     ngx_uint_t i;
     for(i=0; i<=args->nelts; i++){
-        ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "real_handler name compare:for key:%V value:%V \n",&args_unit[i]->key,&args_unit[i]->value);
-        if(ngx_strcasecmp(args_unit[i]->key.data,(u_char *)"handler_name") == 0){
+        ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "real_handler name compare:for len=%z key:%V value:%V \n",args_unit[i].key.len,&args_unit[i].key,&args_unit[i].value);
+        if( ngx_strncasecmp( args_unit[i].key.data, (u_char *) "handler_name", args_unit[i].key.len) == 0 ){
             ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "real_handler name compare:if\n");
-            handler_name = &args_unit[i]->value;
+            handler_name = args_unit[i].value;
             ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "real_handler is %V\n",&handler_name);
             break;
         }
@@ -350,9 +353,11 @@ static ngx_int_t ngx_http_sscctest_handler(ngx_http_request_t *r)
 
     unit = my_cf->handlers->elts;
     for(i=0; i<=my_cf->handlers->nelts; i++){
-        if(ngx_strcasecmp(unit[i]->arg.data, handler_name->data) == 0 ){
+        if(ngx_strncasecmp(unit[i].arg.data, handler_name.data,unit[i].arg.len) == 0 ){
             //调用real_handler函数
-            rc = unit[i]->handler_func(&sscc_C_request, &sscc_C_response);
+            ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "handlers %i arg  is %V\n",i,&handler_name);
+            rc = unit[i].handler_func(&sscc_C_request, &sscc_C_response);
+            ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "handler_func out!\n ");
             if(rc!=NGX_OK) {
                 return rc;
             }

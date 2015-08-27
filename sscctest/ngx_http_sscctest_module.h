@@ -12,8 +12,8 @@
 typedef struct ngx_http_sscctest_request_s ngx_http_sscctest_request_t;
 struct ngx_http_sscctest_request_s
 {
-	ngx_table_elt_t**	cookies;
-	ngx_table_elt_t**	query; 
+	ngx_table_elt_t*	cookies;
+	ngx_table_elt_t*	query; 
 	ngx_str_t*	        remoteAddr;
 	unsigned short		remotePort;
 	ngx_str_t			method;
@@ -65,5 +65,8 @@ typedef struct{
 //     ngx_array_t* handlers;
 
 // }ngx_http_sscctest_loc_conf_t;
+
+
+
 
 #endif /*_NGX_HTTP_SSCCTEST_MODULE_H_INCLUDED_*/
