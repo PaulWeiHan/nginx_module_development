@@ -143,7 +143,7 @@ static char * ngx_http_sscctest(ngx_conf_t *cf, ngx_command_t *cmd, void *conf) 
 static void *ngx_http_sscctest_create_loc_conf(ngx_conf_t *cf)
 {
         
-        ngx_uint_t maxnum_of_handlers = 100;
+        ngx_uint_t maxnum_of_handlers = 20;
         ngx_http_sscctest_loc_conf_t* local_conf = NULL;
         local_conf = ngx_pcalloc(cf->pool, sizeof(ngx_http_sscctest_loc_conf_t));
         if (local_conf == NULL)
@@ -289,7 +289,7 @@ static ngx_int_t ngx_http_sscctest_handler(ngx_http_request_t *r)
     sscc_C_request.cookies = r->headers_in.cookies.elts;
 
     /**************************    sscc_C_request结构体query赋值       *******************************/
-    args = ngx_array_create(r->pool, 100, sizeof(ngx_table_elt_t));
+    args = ngx_array_create(r->pool, 20, sizeof(ngx_table_elt_t));
     // static ngx_int_t ngx_get_args_array(ngx_http_request_t *r, ngx_array_t *a)
     // 可以拿HTTP GET的参数。
     // 第一个参数是ngx_http_request_t；
@@ -357,18 +357,24 @@ static ngx_int_t ngx_http_sscctest_handler(ngx_http_request_t *r)
             //调用real_handler函数
             ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "handlers %i arg  is %V\n",i,&handler_name);
             rc = unit[i].handler_func(&sscc_C_request, &sscc_C_response);
-            ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "handler_func out!\n ");
             if(rc!=NGX_OK) {
                 return rc;
             }
+            ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "handler_func out! remoteAddr:%s \n ", sscc_C_response.buffers.buf->pos);
+            //ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "handler_func out! headers_out.content_type:%V \n ", &sscc_C_response.headers_out.content_type);
             break;
         }
     }
     /* discard request body, since we don't need it here */
     rc = ngx_http_discard_request_body(r);
+    if (rc != NGX_OK) {
+            return rc;
+    }
 
-
-    r->headers_out= sscc_C_response.headers_out;
+    r->headers_out = sscc_C_response.headers_out;
+    //ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "r->headers_out.content_type\n");
+    ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "r->headers_out.content_type:%V \n ", &r->headers_out.content_type);
+    ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "r->headers_out.content_length_n:%d \n ", r->headers_out.content_length_n);
     /* send the header only, if the request type is http 'HEAD' */
     if (r->method == NGX_HTTP_HEAD) {
             return ngx_http_send_header(r);
@@ -376,7 +382,11 @@ static ngx_int_t ngx_http_sscctest_handler(ngx_http_request_t *r)
 
     out= sscc_C_response.buffers;
     /* send the headers of your response */
+    ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "ngx_http_send_header ahead!\n ");
+
     rc = ngx_http_send_header(r);
+
+    ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "ngx_http_send_header out!\n ");
 
     if (rc == NGX_ERROR || rc > NGX_OK || r->header_only) {
             return rc;
