@@ -1,1 +1,2 @@
-#test#  $ngx_http_ssscctest_realhandler_test$
+#ip#  $ngx_http_ssscctest_realhandler_test$
+#uri#  $ngx_http_ssscctest_realhandler_test2$

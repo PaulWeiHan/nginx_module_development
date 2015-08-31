@@ -12,7 +12,6 @@
 typedef struct ngx_http_sscctest_request_s ngx_http_sscctest_request_t;
 struct ngx_http_sscctest_request_s
 {
-	ngx_table_elt_t*	cookies;
 	ngx_table_elt_t*	query; 
 	ngx_str_t*	        remoteAddr;
 	unsigned short		remotePort;
@@ -46,7 +45,7 @@ struct ngx_http_sscctest_response_s
         bad_gateway = 502,
         service_unavailable = 503
     } status;
-    ngx_http_headers_out_t headers_out;
+    ngx_http_headers_out_t *headers_out;
     ngx_str_t content;
     ngx_chain_t buffers;
 };
