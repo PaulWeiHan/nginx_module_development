@@ -1,3 +1,93 @@
 
 Documentation is available at http://nginx.org
+nginx module develop for sscc.
+
+该模块开发主要目的是为了方便深证通公司进行插件函数的添加。
+
+使用方式：
+1，插件函数编写：
+		在nginx-xxxx/sscctest_handlers/handlers.c文件中编写自己的插件函数。接口定义如下：
+		typedef ngx_int_t (*ngx_http_real_handler_pt)(ngx_http_sscctest_request_t *req, ngx_http_sscctest_response_t *resp);
+		传入结构体定义如下：
+		typedef struct ngx_http_sscctest_request_s ngx_http_sscctest_request_t;
+		struct ngx_http_sscctest_request_s
+		{
+			ngx_table_elt_t*	query; 
+			ngx_str_t*	        remoteAddr;
+			unsigned short		remotePort;
+			ngx_str_t			method;
+			ngx_str_t			uri;
+			ngx_int_t			httpVersionMajor;
+			ngx_int_t			httpVersionMinor;
+			ngx_http_headers_in_t	headers_in;			
+
+		};
+
+		typedef struct ngx_http_sscctest_response_s ngx_http_sscctest_response_t;
+		struct ngx_http_sscctest_response_s
+		{
+			enum StatusType
+		    {
+		        ok = 200,
+		        created = 201,
+		        accepted = 202,
+		        no_content = 204,
+		        multiple_choices = 300,
+		        moved_permanently = 301,
+		        moved_temporarily = 302,
+		        not_modified = 304,
+		        bad_request = 400,
+		        unauthorized = 401,
+		        forbidden = 403,
+		        not_found = 404,
+		        internal_server_error = 500,
+		        not_implemented = 501,
+		        bad_gateway = 502,
+		        service_unavailable = 503
+		    } status;
+		    ngx_http_headers_out_t *headers_out;
+		    ngx_str_t content;
+		    ngx_chain_t buffers;
+		};
+
+		Example：
+		ngx_int_t ngx_http_ssscctest_realhandler_test(ngx_http_sscctest_request_t *req, ngx_http_sscctest_response_t *resp)
+		{
+			//YOUR CODE
+		}
+
+		nginx.conf文件中需要有如下配置：
+		location /sscctest {
+			flag;
+		} 
+
+2，访问接口定义：
+		找到文件名为“sscctest”的文本文件，打开文本文件，按照格式进行编辑，预设格式为，访问接口 #YOUR API#，对应的插件函数 $YOUR REALHANDLERFUNC$ 
+
+		Example:
+		#ip#  $ngx_http_ssscctest_realhandler_test$
+3，插件函数编译：
+		在nginx-xxxx/sscctest_handlers/目录下：
+		make clean
+		make
+4，文件放置位置：
+		目前，动态链接库文件与接口定义文件：“sscctest”的位置是写死的，放置路径为：/home/renwh/
+5，访问插件函数方式：
+		访问时，用户需要访问的uri为sscctest/。
+
+		然后，访问链接面后面必须带有形似：handler_name=ip的参数，等号后面可以改为自己在sscctest文件中定义的接口。
+
+		后面可以带有其他args，在插件函数中可以调用，无所谓先后顺序。所有参数都储存在ngx_http_sscctest_request_t结构体中的	ngx_table_elt_t*	query;  数组中。
+
+		Example:
+
+		一个完整的链接为：
+
+		http://your_ip:your_port/sscctest?handler_name=ip
+
+
+Send your question to：rwhsysu@163.com
+
+
+
 
