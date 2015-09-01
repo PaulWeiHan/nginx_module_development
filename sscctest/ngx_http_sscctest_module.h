@@ -12,7 +12,7 @@
 typedef struct ngx_http_sscctest_request_s ngx_http_sscctest_request_t;
 struct ngx_http_sscctest_request_s
 {
-	ngx_table_elt_t*	query; 
+	ngx_array_t*	query; 
 	ngx_str_t*	        remoteAddr;
 	unsigned short		remotePort;
 	ngx_str_t			method;

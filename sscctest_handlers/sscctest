@@ -1,2 +1,3 @@
 #ip#  $ngx_http_ssscctest_realhandler_test$
 #uri#  $ngx_http_ssscctest_realhandler_test2$
+#method#  $ngx_http_ssscctest_realhandler_test3$

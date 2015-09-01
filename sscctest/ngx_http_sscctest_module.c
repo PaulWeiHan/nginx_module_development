@@ -299,7 +299,7 @@ static ngx_int_t ngx_http_sscctest_handler(ngx_http_request_t *r)
         ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "ngx_get_args_array is error!\n");
     }
     //ngx_log_error(NGX_LOG_EMERG, r->connection->log, 0, "ngx_get_args_array is end!\n");
-    sscc_C_request.query = args->elts;
+    sscc_C_request.query = args;
 
     /**************************    sscc_C_request结构体remoteAddr赋值      *******************************/
     struct sockaddr_in *ip = (struct sockaddr_in *) (r->connection->sockaddr); //inet_ntoa(ip->sin_addr) , ntohs(ip->sin_port)
